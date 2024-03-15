@@ -329,7 +329,7 @@ def observation(xTrue, xd, u, RFID):
     return xTrue, z, xd, ud
 
 
-def motion_model(x, u):
+def motion_model(x, u): # odometry
     F = np.array([[1.0, 0, 0],
                   [0, 1.0, 0],
                   [0, 0, 1.0]])
@@ -358,7 +358,8 @@ def main():
 
     time = 0.0
 
-    # RFID positions [x, y]
+# preprocess the data with 3 coordinates into 2
+    # RFID positions [x, y] -> radio frequency identification
     RFID = np.array([[10.0, -2.0], # 0
                      [15.0, 10.0], # 1
                      [15.0, 15.0], # 2
@@ -370,6 +371,7 @@ def main():
                      ])
     n_landmark = RFID.shape[0]
 
+# for true state, get the info from the simulationi
     # State Vector [x y yaw v]'
     xEst = np.zeros((STATE_SIZE, 1))  # SLAM estimation
     xTrue = np.zeros((STATE_SIZE, 1))  # True state
@@ -384,9 +386,9 @@ def main():
 
     while SIM_TIME >= time:
         time += DT
-        u = calc_input(time)
+        u = calc_input(time) # control function -> basically estimating odometry
 
-        xTrue, z, xDR, ud = observation(xTrue, xDR, u, RFID)
+        xTrue, z, xDR, ud = observation(xTrue, xDR, u, RFID) # xTrue based on odometry
 
         particles = fast_slam2(particles, ud, z)
 
