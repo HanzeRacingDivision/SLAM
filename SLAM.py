@@ -359,14 +359,14 @@ def main():
     time = 0.0
 
     # RFID positions [x, y]
-    RFID = np.array([[10.0, -2.0],
-                     [15.0, 10.0],
-                     [15.0, 15.0],
-                     [10.0, 20.0],
-                     [3.0, 15.0],
-                     [-5.0, 20.0],
-                     [-5.0, 5.0],
-                     [-10.0, 15.0]
+    RFID = np.array([[10.0, -2.0], # 0
+                     [15.0, 10.0], # 1
+                     [15.0, 15.0], # 2
+                     [10.0, 20.0], # 3
+                     [3.0, 15.0], # 4
+                     [-5.0, 20.0], # 5
+                     [-5.0, 5.0], # 6
+                     [-10.0, 15.0] # 7
                      ])
     n_landmark = RFID.shape[0]
 
@@ -399,7 +399,7 @@ def main():
         hxDR = np.hstack((hxDR, xDR))
         hxTrue = np.hstack((hxTrue, xTrue))
 
-        print("this is the estimated x:", xEst)
+        #print("this is the estimated x:", xEst)
 
         if show_animation:  # pragma: no cover
             plt.cla()
@@ -411,10 +411,12 @@ def main():
 
             for iz in range(len(z[:, 0])):
                 landmark_id = int(z[2, iz])
+                print("the landmark id is:", landmark_id)
                 plt.plot([xEst[0][0], RFID[landmark_id, 0]], [
                     xEst[1][0], RFID[landmark_id, 1]], "-k")
 
             for i in range(N_PARTICLE):
+                #i = 1
                 plt.plot(particles[i].x, particles[i].y, ".r")
                 plt.plot(particles[i].lm[:, 0], particles[i].lm[:, 1], "xb")
 
